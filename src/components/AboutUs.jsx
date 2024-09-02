@@ -5,7 +5,7 @@ export default function AboutUs() {
   return (
     <>
       <h2 className="text-center font-bold text-4xl m-4">About Us</h2>
-      <div className=" p-4">
+      <div className=" text-center p-4">
         At CodeQuest, we are dedicated to revolutionizing the fruit industry
         through innovative technology solutions. Our state-of-the-art fruit
         grading system leverages advanced machine learning algorithms and
@@ -17,8 +17,8 @@ export default function AboutUs() {
         industry, empowering businesses to deliver the best produce to the
         market.
       </div>
-      <div className="m-4 p-4">
-        <div className="font-semibold text-xl">Our Team</div>
+      <div className="mb-4 p-4">
+        <div className="font-semibold text-3xl text-center">Our Team</div>
         <div className="flex justify-between">
           <div className="m-5">
             <div className="mb-5">Purva Nagap</div>
