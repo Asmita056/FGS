@@ -6,6 +6,7 @@ import Analysis from './components/Analysis';
 import AboutUs from './components/AboutUs';
 import ContactUs from './components/ContactUs';
 import Profile from './components/Profile';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Profile" element={<Profile />} />
         </Routes>
+        <Footer/>
       </Router>
     </>
   )
