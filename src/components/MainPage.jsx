@@ -2,18 +2,24 @@ import DefaultImage from "../images/default_img.png";
 import react,  { useState } from "react";
 
 export default function MainPage() {
-  const [selectedFile, setSelectedFile] = useState(DefaultImage);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [input,setinput]=useState ('')
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedFile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const fileChangeHandler=(e)=>{
+    setSelectedFile(e.target.files[0]);
+    //console.log(e.target.files[0])
+  }
+
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setSelectedFile(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleSubmit = (e) => {
      const formData = new FormData();
@@ -22,18 +28,17 @@ export default function MainPage() {
       selectedFile,
       selectedFile.name
      );
-
+         formData.append(
+          "username",
+          input
+         )
      const requestOptions = {
       method: 'POST',
       body: formData
      };
 
-    fetch("serverendpoint", requestOptions)
-    .then(response => response.json()
-    .then(function(response) {
-      console.log(response)
-    })
-    )
+    fetch("http://127.0.0.1:8000/uploadtwo/", requestOptions)
+    .then(response => console.log(response.json()))
     
 
   }
