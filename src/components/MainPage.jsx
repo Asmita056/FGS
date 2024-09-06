@@ -1,71 +1,84 @@
+import React, { useState } from "react";
 import DefaultImage from "../images/default_img.png";
-import react,  { useState } from "react";
 
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [input,setinput]=useState ('')
+  const [input, setInput] = useState("");
 
-  const fileChangeHandler=(e)=>{
+  const fileChangeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
-    //console.log(e.target.files[0])
-  }
+  };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setSelectedFile(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
 
   const handleSubmit = (e) => {
-     const formData = new FormData();
-     formData.append(
-      "file",
-      selectedFile,
-      selectedFile.name
-     );
-         formData.append(
-          "username",
-          input
-         )
-     const requestOptions = {
-      method: 'POST',
-      body: formData
-     };
+    e.preventDefault();
 
-    fetch("http://127.0.0.1:8000/uploadtwo/", requestOptions)
-    .then(response => console.log(response.json()))
-    
+    if (!(selectedFile instanceof File)) {
+      console.error("selectedFile is not a valid File object");
+      return;
+    }
 
-  }
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("username", input);
+
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+    };
+
+    fetch("http://127.0.0.1:8000/upload", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error:", error));
+  };
 
   return (
     <div className="flex flex-col items-center">
       <div className="h-96 w-96">
         <img
-          src={selectedFile}
-          alt="Upload Image"
+          src={selectedFile ? URL.createObjectURL(selectedFile) : DefaultImage}
+          alt="Upload Preview"
           className="h-full w-full object-cover"
         />
       </div>
 
-      <form id="form" encType="multipart/form-data" className="m-2">
+      <form
+        id="form"
+        encType="multipart/form-data"
+        className="m-2"
+        onSubmit={handleSubmit}
+      >
         <input
           type="file"
           id="file-input"
-          name="ImageStyle"
+          name="file"
           onChange={handleImageChange}
           className="m-3"
-          accept='.jpeg, .png, .jpg'
+          accept=".jpeg, .png, .jpg"
         />
-        <button onClick={handleSubmit} className="bg-blue-500 p-3 rounded-lg hover:bg-blue-600">Confirm</button>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Enter username"
+          className="m-3 p-2 border rounded"
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 p-3 rounded-lg hover:bg-blue-600"
+        >
+          Confirm
+        </button>
       </form>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center mt-4">
         <div className="font-semibold text-lg">The current fruit is:</div>
         <div className="flex">
           <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
@@ -81,8 +94,7 @@ export default function MainPage() {
 
       <div className="flex flex-col items-center mt-4">
         <p className="text-lg font-semibold">Today's Analysis</p>
-
-        <div className="flex justify-center mt-4 ">
+        <div className="flex justify-center mt-4">
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>No. of Fruits</span>
             <span className="text-center">100</span>
