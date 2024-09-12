@@ -10,7 +10,7 @@ export default function ContactUs() {
         >
           {/* <h2 className="text-center font-bold text-4xl mb-4">Contact Us</h2> */}
         </div>
-        <div>
+        <div className="p-3">
           {/* <div className="flex  justify-between ">
           <div className="card ">
             <h2>Operating Hours</h2>
@@ -34,7 +34,9 @@ export default function ContactUs() {
         </div> */}
           <div className="flex justify-center space-x-8 py-8">
             <div className="card  p-6 shadow-md rounded-lg w-64">
-              <h2 className="text-[#143601] text-xl font-semibold">Operating Hours</h2>
+              <h2 className="text-[#143601] text-xl font-semibold">
+                Operating Hours
+              </h2>
               <h4 className="text-[#2E8D49]">
                 Morning, 9:00 A.M
                 <br />
@@ -49,16 +51,16 @@ export default function ContactUs() {
               </h4>
             </div>
             <div className="card  p-6 shadow-md rounded-lg w-64">
-              <h2 className="text-[#143601] text-xl font-semibold">General Enquiries</h2>
+              <h2 className="text-[#143601] text-xl font-semibold">
+                General Enquiries
+              </h2>
               <h4 className="text-[#2E8D49]">phalSense.AI@gmail.com</h4>
             </div>
           </div>
-
           {/* <hr className='text-#59EAA8'/> */}
-
           <hr className="w-[63.063rem] h-[0.09rem] bg-[#59EAA8] border-0 mx-auto my-4" />
-05
-          <div className="text-center items-center text-lg mt-6 mb-6">
+
+          <div className="text-center items-center text-lg">
             We'd love to hear from you!
             <br /> Whether you have a question, want to learn more about our
             Fruit Grading System,

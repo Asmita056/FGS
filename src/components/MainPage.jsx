@@ -40,7 +40,7 @@ export default function MainPage() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-[#F3FFCF] p-3">
       <div className="h-96 w-96">
         <img
           src={selectedFile ? URL.createObjectURL(selectedFile) : DefaultImage}
@@ -78,7 +78,7 @@ export default function MainPage() {
         </button>
       </form>
 
-      <div className="flex flex-col items-center mt-4">
+      <div className="flex flex-col items-center mt-3">
         <div className="font-semibold text-lg">The current fruit is:</div>
         <div className="flex">
           <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
@@ -94,7 +94,7 @@ export default function MainPage() {
 
       <div className="flex flex-col items-center mt-4">
         <p className="text-lg font-semibold">Today's Analysis</p>
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center ">
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>No. of Fruits</span>
             <span className="text-center">100</span>
