@@ -1,6 +1,9 @@
 import os
 import numpy as np
 import pandas as pd
+import tensorflow as tf
+import plotly.graph_objs as go
+import plotly.io as pio
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score
@@ -9,18 +12,17 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
-import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential, Model
-import plotly.graph_objs as go
-import plotly.io as pio
 # drive.mount('/content/drive')
 # !ls /content/drive/My\ Drive/
 
-data_dir =("/content/drive/MyDrive/Majorproj/main/MajorProject/fruitGradingSystem/dataset")
+data_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\Dataset FGS"
+# C:\Users\akash\OneDrive\Desktop\Fruit Grading System\FGS\Dataset FGS
+
 categories = ['Average','Best', 'Worst']
 img_size = (128, 128)
 

@@ -5,5 +5,7 @@ tensorflow
 plotly
 
 
-pip install -r requirements.txt
-pip install tensorflow-cpu
+# pip install -r requirements.txt
+# pip install tensorflow-cpu
+# pip install scikit-learn
+# 
