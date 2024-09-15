@@ -1,9 +1,11 @@
 import os
+import io
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import plotly.graph_objs as go
 import plotly.io as pio
+from PIL import Image
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score
@@ -12,16 +14,13 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
-from tensorflow.keras.models import Sequential
+# from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential, Model
-# drive.mount('/content/drive')
-# !ls /content/drive/My\ Drive/
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
-data_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\Dataset FGS"
-# C:\Users\akash\OneDrive\Desktop\Fruit Grading System\FGS\Dataset FGS
 
 categories = ['Average','Best', 'Worst']
 img_size = (128, 128)
@@ -41,6 +40,8 @@ def load_images(data_dir, categories, img_size):
             except Exception as e:
                  print(f"Error loading image {img}: {e}")
     return np.array(data), np.array(labels)
+
+data_dir = "C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\Dataset FGS"
 data, labels = load_images(data_dir, categories, img_size)
 data = data / 255.0
 label_encoder = LabelEncoder()
@@ -49,10 +50,9 @@ labels = to_categorical(labels)
 
 X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.3, random_state=42)
 
-
 cnn_model = Sequential([
-    tf.keras.layers.Input(shape=(img_size[0], img_size[1], 3)),
-    Conv2D(32, (3, 3), activation='relu'),
+    # tf.keras.layers.Input(shape=(img_size[0], img_size[1], 3)),
+    Conv2D(32, (3, 3), activation='relu',input_shape=(img_size[0], img_size[1], 3) ),
     MaxPooling2D((2, 2)),
     Conv2D(64, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
@@ -63,24 +63,34 @@ cnn_model = Sequential([
     Dropout(0.5),
     Dense(3, activation='softmax')
 ])
+# cnn_model = Sequential([
+#     tf.keras.layers.Input(shape=(img_size[0], img_size[1], 3)),
+#     Conv2D(32, (3, 3), activation='relu'),
+#     MaxPooling2D((2, 2)),
+#     Conv2D(64, (3, 3), activation='relu'),
+#     MaxPooling2D((2, 2)),
+#     Conv2D(128, (3, 3), activation='relu'),
+#     MaxPooling2D((2, 2)),
+#     Flatten(),
+#     Dense(128, activation='relu'),
+#     Dropout(0.5),
+#     Dense(3, activation='softmax')
+# ])
 
 cnn_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
 cnn_model.fit(X_train, y_train, epochs=10, validation_split=0.2)
-
 cnn_model.summary()
 
-grad_model = Model(cnn_model.inputs, cnn_model.get_layer('dense_1').output)
+# grad_model = Model(cnn_model.inputs, cnn_model.get_layer('dense_1').output)
+grad_model = Model(cnn_model.inputs, cnn_model.layers[-2].output)
 features_train = grad_model.predict(X_train)
 features_test = grad_model.predict(X_test)
-
 
 cnn_y_pred = np.argmax(grad_model.predict(X_test), axis=-1)
 cnn_y_test = np.argmax(y_test, axis=-1)
 print("CNN Classification Report:")
 print(classification_report(cnn_y_test, cnn_y_pred))
 print("CNN Accuracy:", accuracy_score(cnn_y_test, cnn_y_pred))
-
 
 y_train_flat = np.argmax(y_train, axis=1)
 y_test_flat = np.argmax(y_test, axis=1)
@@ -124,9 +134,7 @@ else:
     y_test_flat_int = y_test_flat
 
 log_reg_model = LogisticRegression(multi_class='ovr', solver='lbfgs', max_iter=1000)
-
 log_reg_model.fit(features_train, y_train_flat_int)
-
 y_pred_log_reg = log_reg_model.predict(features_test)
 
 print("Logistic Regression Classification Report:")
@@ -158,3 +166,41 @@ fig.update_layout(
 fig.show()
 
 
+
+def predict_image(img_array):
+    # Load and preprocess the input image
+    # img = load_img(image_path, target_size=img_size)
+    # img_array = img_to_array(img) / 255.0
+    # img_array = np.expand_dims(img_array, axis=0)
+    
+    # Extract features using the CNN model
+    features = grad_model.predict(img_array)
+    
+    # Get predictions from each model
+    cnn_pred = np.argmax(cnn_model.predict(img_array), axis=-1)
+    knn_pred = knn.predict(features)
+    nb_pred = nb.predict(features)
+    rf_pred = rf.predict(features)
+    svm_pred = svm.predict(features)
+    log_reg_pred = log_reg_model.predict(features)
+    
+    # Convert predictions to category names
+    predictions = {
+        'CNN': categories[cnn_pred[0]],
+        'KNN': categories[knn_pred[0]],
+        'Naive Bayes': categories[nb_pred[0]],
+        'Random Forest': categories[rf_pred[0]],
+        'SVM': categories[svm_pred[0]],
+        'Logistic Regression': categories[log_reg_pred[0]]
+    }
+
+    return predictions
+    
+    # Print predictions
+    # print("Predictions:")
+    # for model, prediction in predictions.items():
+    #     print(f"{model}: {prediction}")
+
+# Example usage
+# image_path = 'C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\test cases\\test5.jpg'  # Replace this with the actual path to your image
+# predict_image(image_path)

@@ -1,9 +1,12 @@
-from fastapi import FastAPI,File,Form, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+import numpy as np
 # from PIL import image
 import aiofiles
 import os
 import random
+from fastapi import FastAPI,File,Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from train_model import predict_image
 
 app = FastAPI()
 
@@ -46,8 +49,16 @@ async def upload_image(
     async with aiofiles.open(file_location, 'wb') as f:
         content = await file.read() 
         await f.write(content) 
+
+    # Preprocess the image and make prediction
+    img = load_img(file_location, target_size=(128, 128))  # Adjust size as per your model
+    img_array = img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+
+    # Call your prediction function
+    predictions = predict_image(img_array)
     
-    return {"message": f"File uploaded successfully by {username}", "file_path": file_location}
+    return {"message": f"File uploaded successfully by {username}", "file_path": file_location, "predictions" : predictions}
 
 
 if __name__ == "__main__":

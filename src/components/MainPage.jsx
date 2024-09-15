@@ -4,6 +4,7 @@ import DefaultImage from "../images/default_img.png";
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [input, setInput] = useState("");
+  const [predictions, setPredictions] = useState(null);
 
   const fileChangeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -35,7 +36,10 @@ export default function MainPage() {
 
     fetch("http://127.0.0.1:8000/upload", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        console.log(data);
+        setPredictions(data.predictions);
+      })
       .catch((error) => console.error("Error:", error));
   };
 
@@ -77,20 +81,38 @@ export default function MainPage() {
           Confirm
         </button>
       </form>
-
-      <div className="flex flex-col items-center mt-3">
-        <div className="font-semibold text-lg">The current fruit is:</div>
-        <div className="flex">
-          <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
-            <span>Category</span>
-            <span className="text-center">Best</span>
-          </div>
-          <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
-            <span>Accuracy</span>
-            <span className="text-center">80</span>
+      {/* {predictions && (
+        <div className="flex flex-col items-center mt-3">
+          <div className="font-semibold text-lg">The current fruit is:</div>
+          <div className="flex">
+            <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
+              {Object.defineProperties(predictions).map(([model, result]) => (
+                <span key={model}>
+                  {model}: {result}
+                </span>
+              ))}
+              <span>Category</span>
+              <span className="text-center">Best</span>
+            </div>
+            <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
+              <span>Accuracy</span>
+              <span className="text-center">80</span>
+            </div>
           </div>
         </div>
-      </div>
+      )} */}
+      {predictions && (
+        <div className="flex flex-col items-center mt-3">
+          <div className="font-semibold text-lg">Predictions:</div>
+          <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
+            {Object.entries(predictions).map(([model, result]) => (
+              <span key={model}>
+                {model}: {result}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col items-center mt-4">
         <p className="text-lg font-semibold">Today's Analysis</p>
