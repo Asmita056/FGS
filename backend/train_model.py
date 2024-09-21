@@ -1,3 +1,5 @@
+# COLAB FILE
+
 import os
 import io
 import numpy as np
@@ -6,6 +8,7 @@ import tensorflow as tf
 import plotly.graph_objs as go
 import plotly.io as pio
 from PIL import Image
+from collections import Counter
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score
@@ -168,15 +171,8 @@ fig.show()
 
 
 def predict_image(img_array):
-    # Load and preprocess the input image
-    # img = load_img(image_path, target_size=img_size)
-    # img_array = img_to_array(img) / 255.0
-    # img_array = np.expand_dims(img_array, axis=0)
-    
-    # Extract features using the CNN model
     features = grad_model.predict(img_array)
     
-    # Get predictions from each model
     cnn_pred = np.argmax(cnn_model.predict(img_array), axis=-1)
     knn_pred = knn.predict(features)
     nb_pred = nb.predict(features)
@@ -184,22 +180,93 @@ def predict_image(img_array):
     svm_pred = svm.predict(features)
     log_reg_pred = log_reg_model.predict(features)
     
-    # Convert predictions to category names
-    predictions = {
-        'CNN': categories[cnn_pred[0]],
-        'KNN': categories[knn_pred[0]],
-        'Naive Bayes': categories[nb_pred[0]],
-        'Random Forest': categories[rf_pred[0]],
-        'SVM': categories[svm_pred[0]],
-        'Logistic Regression': categories[log_reg_pred[0]]
-    }
+    ## Convert predictions to category names
+    # predictions = {
+    #     'CNN': categories[cnn_pred[0]],
+    #     'KNN': categories[knn_pred[0]],
+    #     'Naive Bayes': categories[nb_pred[0]],
+    #     'Random Forest': categories[rf_pred[0]],
+    #     'SVM': categories[svm_pred[0]],
+    #     'Logistic Regression': categories[log_reg_pred[0]]
+    # }
 
-    return predictions
+    predictions = [
+        cnn_pred[0],  
+        knn_pred[0],  
+        nb_pred[0],
+        rf_pred[0],
+        svm_pred[0],
+        log_reg_pred[0]
+    ]
+
+    accuracy_percent = [
+        
+    ]
+
+    category_predictions = [categories[pred] for pred in predictions]
+    prediction_count = Counter(category_predictions)
+    most_common_category = prediction_count.most_common(1)[0][0]
+    return most_common_category
     
-    # Print predictions
-    # print("Predictions:")
-    # for model, prediction in predictions.items():
-    #     print(f"{model}: {prediction}")
+
+# def predict_image(img_array, true_label):
+#     # Extract features for the input image
+#     features = grad_model.predict(img_array)
+    
+#     # Individual model predictions
+#     cnn_pred = np.argmax(cnn_model.predict(img_array), axis=-1)
+#     knn_pred = knn.predict(features)
+#     nb_pred = nb.predict(features)
+#     rf_pred = rf.predict(features)
+#     svm_pred = svm.predict(features)
+#     log_reg_pred = log_reg_model.predict(features)
+    
+#     # Convert numerical predictions to category names
+#     predictions = [
+#         cnn_pred[0],  
+#         knn_pred[0],  
+#         nb_pred[0],
+#         rf_pred[0],
+#         svm_pred[0],
+#         log_reg_pred[0]
+#     ]
+    
+#     # Calculate the accuracy of each model by comparing with the true label
+#     model_predictions = [cnn_pred[0], knn_pred[0], nb_pred[0], rf_pred[0], svm_pred[0], log_reg_pred[0]]
+#     true_label_encoded = categories.index(true_label)
+
+#     # Dynamic accuracies for each model
+#     accuracies = [
+#         1 if cnn_pred[0] == true_label_encoded else 0,
+#         1 if knn_pred[0] == true_label_encoded else 0,
+#         1 if nb_pred[0] == true_label_encoded else 0,
+#         1 if rf_pred[0] == true_label_encoded else 0,
+#         1 if svm_pred[0] == true_label_encoded else 0,
+#         1 if log_reg_pred[0] == true_label_encoded else 0
+#     ]
+    
+#     # Calculate the average accuracy across all models
+#     average_accuracy = sum(accuracies) / len(accuracies)
+    
+#     # Convert numerical predictions to category names
+#     category_predictions = [categories[pred] for pred in predictions]
+    
+#     # Count occurrences of each category to find the most common category
+#     prediction_count = Counter(category_predictions)
+#     most_common_category = prediction_count.most_common(1)[0][0]
+    
+#     # Return the most common prediction and average accuracy
+#     return {
+#         "most_common_category": most_common_category,
+#         "average_accuracy": average_accuracy
+#     }
+
+
+    ## GIVE IMAGES MANUALLY THROUGH PATH
+#     Print predictions
+#     print("Predictions:")
+#     for model, prediction in predictions.items():
+#         print(f"{model}: {prediction}")
 
 # Example usage
 # image_path = 'C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\test cases\\test5.jpg'  # Replace this with the actual path to your image

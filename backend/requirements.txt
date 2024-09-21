@@ -8,4 +8,8 @@ plotly
 # pip install -r requirements.txt
 # pip install tensorflow-cpu
 # pip install scikit-learn
-# 
+# pip install fastapi uvicorn tensorflow scikit-learn
+
+
+
+# uvicorn main:app --reload

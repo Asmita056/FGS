@@ -1,3 +1,5 @@
+# FASTAPI
+
 import numpy as np
 # from PIL import image
 import aiofiles
@@ -11,9 +13,6 @@ from train_model import predict_image
 app = FastAPI()
 
 origins = [
-    # "http://localhost.tiangolo.com",
-    # "https://localhost.tiangolo.com",
-    # "http://localhost",
     "http://localhost:3000",
     "http://localhost:5173",
 ]

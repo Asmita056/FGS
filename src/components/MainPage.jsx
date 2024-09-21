@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import DefaultImage from "../images/default_img.png";
+import UploadImage from "../images/upload_img.png";
 
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [input, setInput] = useState("");
   const [predictions, setPredictions] = useState(null);
+  const [accuracy_percent, setAccuracy] = useState(null);
 
   const fileChangeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -47,7 +49,7 @@ export default function MainPage() {
     <div className="flex flex-col items-center bg-[#F3FFCF] p-3">
       <div className="h-96 w-96">
         <img
-          src={selectedFile ? URL.createObjectURL(selectedFile) : DefaultImage}
+          src={selectedFile ? URL.createObjectURL(selectedFile) : UploadImage}
           alt="Upload Preview"
           className="h-full w-full object-cover"
         />
@@ -102,15 +104,25 @@ export default function MainPage() {
         </div>
       )} */}
       {predictions && (
-        <div className="flex flex-col items-center mt-3">
-          <div className="font-semibold text-lg">Predictions:</div>
-          <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
-            {Object.entries(predictions).map(([model, result]) => (
+        <div className="flex mx-auto my-auto">
+          <div className="flex flex-col items-center m-2">
+            <div className="font-semibold text-lg">Predictions</div>
+            <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
+              {/* {Object.entries(predictions).map(([model, result]) => (
               <span key={model}>
                 {model}: {result}
               </span>
-            ))}
+            ))} */}
+              <span>Category: {predictions}</span>
+            </div>
           </div>
+
+          {/* <div className="flex flex-col items-center mt-2">
+            <div className="font-semibold text-lg">Accuracy</div>
+            <div className="shadow-lg m-4 p-3 flex flex-col rounded-xl">
+              <span>Percent: {accuracy_percent}</span>
+            </div>
+          </div> */}
         </div>
       )}
 
