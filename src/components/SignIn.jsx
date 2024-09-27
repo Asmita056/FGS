@@ -10,8 +10,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email == "123" && password == "123") {
-      // window.history.replaceState(null, null, "/Home");
+    if (email == "123@gmail.com" && password == "123") {
       // window.location.replace = "http://localhost:5173/Home";
       navigate("/Home", { replace: true });
     }

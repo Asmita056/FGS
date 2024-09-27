@@ -14,13 +14,13 @@ import Profile from "./components/Profile";
 import Footer from "./components/Footer";
 import SignIn from "./components/SignIn";
 
-function Layout() {
+function Layout({ email }) {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/";
 
   return (
     <>
-      {!hideHeaderFooter && <NavBar />}
+      {!hideHeaderFooter && <NavBar email={email} />}
       <Routes>
         <Route path="/Home" element={<MainPage />} />
         <Route path="/Analysis" element={<Analysis />} />
@@ -35,9 +35,10 @@ function Layout() {
 }
 
 function App() {
+  const [email, setEmail] = useState("123@gmail.com");
   return (
     <Router>
-      <Layout />
+      <Layout email={email} />
     </Router>
   );
 }
