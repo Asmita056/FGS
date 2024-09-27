@@ -3,7 +3,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 export default function Footer() {
   return (
     <>
-      <div className="p-3 bg-lime-400">
+      <div className="p-3 bg-lime-400 ">
         <div className="text-center  mb-3">
           <h2 className="text-[#2E8D49]">
             Stay connected and follow our journey

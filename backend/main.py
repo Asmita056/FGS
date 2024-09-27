@@ -10,6 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from train_model import predict_image
 
+
+# print("helooooooooooo", tensorflow.__version__)
+
 app = FastAPI()
 
 origins = [

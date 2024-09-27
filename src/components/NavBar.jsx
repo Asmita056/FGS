@@ -11,7 +11,7 @@ export default function NavBar() {
         <div>
           <ul className="flex justify-end space-x-8 text-lg">
             <li className="p-3 hover:underline">
-              <Link to="/">HOME</Link>
+              <Link to="/Home">HOME</Link>
             </li>
             <li className="p-3 hover:underline">
               <Link to="/Analysis">ANALYSIS</Link>
@@ -24,6 +24,9 @@ export default function NavBar() {
             </li>
             <li className="p-3 hover:underline">
               <Link to="/Profile">PROFILE</Link>
+            </li>
+            <li className="p-3 hover:underline">
+              <Link to="/">SIGNIN</Link>
             </li>
           </ul>
         </div>
