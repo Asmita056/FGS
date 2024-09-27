@@ -29,6 +29,7 @@ export default function SignIn() {
         {/* second half */}
         <div className="w-1/2 flex flex-col items-center p-5  ">
           <h1 className="text-4xl font-bold m-3">Login </h1>
+          <p>Welcome! Please login to your account.</p>
 
           <form className="w-full" onSubmit={handleSubmit}>
             <div className="m-3">
