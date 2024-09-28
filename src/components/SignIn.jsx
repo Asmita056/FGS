@@ -20,7 +20,7 @@ export default function SignIn() {
     <div className="h-screen flex justify-center items-center mx-auto my-auto bg-[#F3FFCF]">
       <div className="flex items-center h-4/6 justify-center rounded-3xl bg-[#f2f7e6] w-3/4 shadow-lg">
         <div className="flex flex-col justify-center w-1/2 items-center m-4">
-          <img src={Logo} className="w-32 rounded-full" />
+          <img src={Logo} className="w-32 rounded-3xl" />
           <div className="text-7xl">PhalSense AI</div>
         </div>
 

@@ -7,6 +7,10 @@ export default function MainPage() {
   const [input, setInput] = useState("");
   const [predictions, setPredictions] = useState(null);
   const [accuracy_percent, setAccuracy] = useState(null);
+  const [bestCount, setBestCount] = useState(0);
+  const [averageCount, setAverageCount] = useState(0);
+  const [worstCount, setWorstCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   const fileChangeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -39,8 +43,12 @@ export default function MainPage() {
     fetch("http://127.0.0.1:8000/upload", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("Response Data:", data);
         setPredictions(data.predictions);
+        setTotalCount(data.total_count);
+        setBestCount(data.best_count);
+        setAverageCount(data.average_count);
+        setWorstCount(data.worst_count);
       })
       .catch((error) => console.error("Error:", error));
   };
@@ -131,22 +139,22 @@ export default function MainPage() {
         <div className="flex justify-center ">
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>No. of Fruits</span>
-            <span className="text-center">100</span>
+            <span className="text-center">{totalCount}</span>
           </div>
 
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>Best Quality</span>
-            <span className="text-center">80</span>
+            <span className="text-center">{bestCount}</span>
           </div>
 
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>Average Quality</span>
-            <span className="text-center">15</span>
+            <span className="text-center">{averageCount}</span>
           </div>
 
           <div className="shadow-lg m-4 p-3 flex-col flex rounded-xl">
             <span>Worst Quality</span>
-            <span className="text-center">5</span>
+            <span className="text-center">{worstCount}</span>
           </div>
         </div>
       </div>

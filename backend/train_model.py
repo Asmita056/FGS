@@ -8,7 +8,8 @@ import tensorflow as tf
 import plotly.graph_objs as go
 import plotly.io as pio
 import pickle
-from PIL import Image
+# from PIL import Image
+from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import VotingClassifier
 from collections import Counter
 from sklearn.model_selection import train_test_split
@@ -138,7 +139,7 @@ if y_test_flat.ndim > 1:
 else:
     y_test_flat_int = y_test_flat
 
-log_reg_model = LogisticRegression(multi_class='ovr', solver='lbfgs', max_iter=1000)
+log_reg_model = OneVsRestClassifier(LogisticRegression(solver='lbfgs', max_iter=1000))
 log_reg_model.fit(features_train, y_train_flat_int)
 y_pred_log_reg = log_reg_model.predict(features_test)
 
@@ -159,7 +160,9 @@ for model_name, accuracy in zip(model_names, accuracies):
         x=[model_name], y=[accuracy],
         mode='lines+markers+text',
         name=model_name
-    ))
+    )) 
+
+
 
 fig.update_layout(
     title='Model Accuracy Comparison',
@@ -170,77 +173,101 @@ fig.update_layout(
 
 fig.show()
 
-                                                                                # purvaa's code
-# # with open('fruit_grading_system_models.pkl', 'wb') as f:
-# #     pickle.dump({
-# #         'cnn_model': cnn_model,
-# #         'knn': knn,
-# #         'nb': nb,
-# #         'rf': rf,
-# #         'svm': svm,
-# #         'log_reg_model': log_reg_model,
-# #         'ensemble': ensemble,
-# #         'label_encoder': label_encoder
-# #     }, f)
+ensemble = VotingClassifier(estimators=[
+    ('knn', knn),
+    ('nb', nb),
+    ('rf', rf),
+    ('svm', svm),
+    ('log_reg', log_reg_model)
+], voting='hard')
 
-# # print("Models saved to fruit_grading_system_models.pkl")
-
-# # external_image_path = '/content/drive/MyDrive/Majorproj/main/MajorProject/fruitGradingSystem/test6.jpg'
-
-# # img_size = (128, 128)
-# # external_img = load_img(external_image_path, target_size=img_size)
-# # external_img_array = img_to_array(external_img)
-# # external_img_array = external_img_array / 255.0
-# # external_img_array = np.expand_dims(external_img_array, axis=0)
-
-# # external_features = grad_model.predict(external_img_array)
+# Fit the ensemble model
+ensemble.fit(features_train, y_train_flat)
 
 
-# # ensemble_prediction = ensemble.predict(external_features)
+                                                        # purvaa's code
+# with open('fruit_grading_system_models.pkl', 'wb') as f:
+#     pickle.dump({
+#         'cnn_model': cnn_model,
+#         'knn': knn,
+#         'nb': nb,
+#         'rf': rf,
+#         'svm': svm,
+#         'log_reg_model': log_reg_model,
+#         'ensemble': ensemble,
+#         'label_encoder': label_encoder
+#     }, f)
+
+# print("Models saved to fruit_grading_system_models.pkl")
+
+# external_image_path = 'C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\test cases\\test5.jpg'
+
+# img_size = (128, 128)
+# external_img = load_img(external_image_path, target_size=img_size)
+# external_img_array = img_to_array(external_img)
+# external_img_array = external_img_array / 255.0
+# external_img_array = np.expand_dims(external_img_array, axis=0)
+
+# external_features = grad_model.predict(external_img_array)
+
+# ensemble_prediction = ensemble.predict(external_features)
+
+# categories = ['Best', 'Average', 'Worst']
+# predicted_class_index = ensemble_prediction[0]
+# predicted_class_name = categories[predicted_class_index]
+
+# print(f"Predicted class index: {predicted_class_index}")
+# print(f"Predicted class name: {predicted_class_name}")
 
 
-# # categories = ['Best', 'Average', 'Worst']
-# # predicted_class_index = ensemble_prediction[0]
-# # predicted_class_name = categories[predicted_class_index]
-
-# # print(f"Predicted class index: {predicted_class_index}")
-# # print(f"Predicted class name: {predicted_class_name}")
                                                                     # end
 
-                                                                      ## correct code till return most_category
 def predict_image(img_array):
+    # Extract features using CNN model
     features = grad_model.predict(img_array)
     
-    cnn_pred = np.argmax(cnn_model.predict(img_array), axis=-1)
-    knn_pred = knn.predict(features)
-    nb_pred = nb.predict(features)
-    rf_pred = rf.predict(features)
-    svm_pred = svm.predict(features)
-    log_reg_pred = log_reg_model.predict(features)
+    # Predict using the ensemble model
+    ensemble_prediction = ensemble.predict(features)
+
+    # Convert predictions to category names
+    predicted_class_index = ensemble_prediction[0]
+    predicted_class_name = categories[predicted_class_index]
+
+    return predicted_class_name
+#                                                                       # correct code till return most_category
+# def predict_image(img_array):
+#     features = grad_model.predict(img_array)
     
-    ## Convert predictions to category names
-    # predictions = {
-    #     'CNN': categories[cnn_pred[0]],
-    #     'KNN': categories[knn_pred[0]],
-    #     'Naive Bayes': categories[nb_pred[0]],
-    #     'Random Forest': categories[rf_pred[0]],
-    #     'SVM': categories[svm_pred[0]],
-    #     'Logistic Regression': categories[log_reg_pred[0]]
-    # }
+#     cnn_pred = np.argmax(cnn_model.predict(img_array), axis=-1)
+#     knn_pred = knn.predict(features)
+#     nb_pred = nb.predict(features)
+#     rf_pred = rf.predict(features)
+#     svm_pred = svm.predict(features)
+#     log_reg_pred = log_reg_model.predict(features)
+    
+#     ## Convert predictions to category names
+#     # predictions = {
+#     #     'CNN': categories[cnn_pred[0]],
+#     #     'KNN': categories[knn_pred[0]],
+#     #     'Naive Bayes': categories[nb_pred[0]],
+#     #     'Random Forest': categories[rf_pred[0]],
+#     #     'SVM': categories[svm_pred[0]],
+#     #     'Logistic Regression': categories[log_reg_pred[0]]
+#     # }
 
-    predictions = [
-        cnn_pred[0],  
-        knn_pred[0],  
-        nb_pred[0],
-        rf_pred[0],
-        svm_pred[0],
-        log_reg_pred[0]
-    ]
+#     predictions = [
+#         cnn_pred[0],  
+#         knn_pred[0],  
+#         nb_pred[0],
+#         rf_pred[0],
+#         svm_pred[0],
+#         log_reg_pred[0]
+#     ]
 
-    category_predictions = [categories[pred] for pred in predictions]
-    prediction_count = Counter(category_predictions)
-    most_common_category = prediction_count.most_common(1)[0][0]
-    return most_common_category
+#     category_predictions = [categories[pred] for pred in predictions]
+#     prediction_count = Counter(category_predictions)
+#     most_common_category = prediction_count.most_common(1)[0][0]
+#     return most_common_category
                                                                                 #end
 
 
@@ -307,3 +334,52 @@ def predict_image(img_array):
 # Example usage
 # image_path = 'C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\test cases\\test5.jpg'  # Replace this with the actual path to your image
 # predict_image(image_path)
+
+
+
+# from datetime import datetime
+# import json
+
+# # Initialize or load the daily count
+# def load_daily_count():
+#     try:
+#         with open('daily_count.json', 'r') as f:
+#             return json.load(f)
+#     except FileNotFoundError:
+#         return {}
+
+# # Save daily count
+# def save_daily_count(count_data):
+#     with open('daily_count.json', 'w') as f:
+#         json.dump(count_data, f)
+
+# #Function to upload image and update counts
+# def upload_image(image_path):
+#     img_array = load_img(image_path, target_size=img_size)
+#     img_array = img_to_array(img_array) / 255.0
+#     img_array = np.expand_dims(img_array, axis=0)
+
+#     # Predict category
+#     category = predict_image(img_array)
+
+#     # Get today's date
+#     today = datetime.now().date().isoformat()
+
+#     # Load current counts
+#     daily_count = load_daily_count()
+#     if today not in daily_count:
+#         daily_count[today] = {'Best': 0, 'Average': 0, 'Worst': 0}
+
+#     # Update counts based on prediction
+#     if category in daily_count[today]:
+#         daily_count[today][category] += 1
+
+#     # Save updated counts
+#     save_daily_count(daily_count)
+
+# # Example usage
+# upload_image('path_to_your_uploaded_image.jpg')
+
+# # Print today's counts
+# current_counts = load_daily_count()
+# print(current_counts.get(datetime.now().date().isoformat(), 'No uploads today.'))
