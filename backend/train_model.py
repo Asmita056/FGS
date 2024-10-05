@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import plotly.graph_objs as go
+import json as json
 import plotly.io as pio
 import pickle
 # from PIL import Image
@@ -199,7 +200,6 @@ ensemble.fit(features_train, y_train_flat)
 #     }, f)
 
 # print("Models saved to fruit_grading_system_models.pkl")
-
 # external_image_path = 'C:\\Users\\akash\\OneDrive\\Desktop\\Fruit Grading System\\FGS\\test cases\\test5.jpg'
 
 # img_size = (128, 128)
@@ -223,16 +223,10 @@ ensemble.fit(features_train, y_train_flat)
                                                                     # end
 
 def predict_image(img_array):
-    # Extract features using CNN model
     features = grad_model.predict(img_array)
-    
-    # Predict using the ensemble model
     ensemble_prediction = ensemble.predict(features)
-
-    # Convert predictions to category names
     predicted_class_index = ensemble_prediction[0]
     predicted_class_name = categories[predicted_class_index]
-
     return predicted_class_name
 #                                                                       # correct code till return most_category
 # def predict_image(img_array):

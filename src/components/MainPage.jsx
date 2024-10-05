@@ -1,3 +1,4 @@
+// main page
 import React, { useState } from "react";
 import DefaultImage from "../images/default_img.png";
 import UploadImage from "../images/upload_img.png";
