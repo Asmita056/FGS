@@ -27,9 +27,9 @@ export default function NavBar({ email, setIsAuthenticated }) {
             <li className="p-3 hover:underline">
               <Link to="/Home">HOME</Link>
             </li>
-            <li className="p-3 hover:underline">
+            {/* <li className="p-3 hover:underline">
               <Link to="/Analysis">ANALYSIS</Link>
-            </li>
+            </li> */}
             <li className="p-3 hover:underline">
               <Link to="/AboutUs">ABOUT US</Link>
             </li>

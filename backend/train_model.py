@@ -9,6 +9,7 @@ import plotly.graph_objs as go
 import json as json
 import plotly.io as pio
 import pickle
+import sqlite3
 # from PIL import Image
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import VotingClassifier
